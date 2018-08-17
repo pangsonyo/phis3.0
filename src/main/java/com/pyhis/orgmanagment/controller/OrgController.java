@@ -14,19 +14,18 @@ public class OrgController {
     private OrgService orgService;
 
 
-    //todo 这里后期要封成一个Data<T>格式的
     @PostMapping("/createOrg")
-    public void createOrg(Org org) {
-        orgService.create(org);
-
+    public ResultVO<Org> createOrg(Org org) {
+        Org resultOrg = orgService.create(org);
+        return ResultVOUtil.success(resultOrg);
     }
-
 
     //http://localhost:8080/getOrg?id=01
     @GetMapping("/getOrg")
-    public void createOrg(@RequestParam String id) {
-        Org org = orgService.getById(id);
+    public ResultVO<Org> getOrg(@RequestParam String id) {
+        Optional<Org> org = orgService.findOrgById(id);
         log.info(org);
+        return ResultVOUtil.success(org);
     }
 
 
