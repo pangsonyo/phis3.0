@@ -14,12 +14,20 @@ public class OrgServiceImpl implements OrgService {
 
 
     @Override
-    public void create(Org org) {
-        orgRepository.save(org);
+    public Org create(Org org) {
+        Org result = orgRepository.save(org);
+        return result;
+
     }
 
+    /**
+     * Jpa 有两个根据id的查询方法,直接调用repository的getOne 会延迟加载,返回代理对象,使用findById 返回Optional ,真实对象.
+     * @param id
+     * @return
+     */
     @Override
-    public Org getById(String id) {
-        return orgRepository.getOne(id);
+    public Optional<Org> findOrgById(String id) {
+        return orgRepository.findById(id);
     }
+
 }
