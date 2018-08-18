@@ -1,6 +1,6 @@
 package com.pyhis.orgmanagment.utils;
 
-import com.pyhis.orgmanagment.vo.ResultVO;
+import com.pyhis.orgmanagment.VO.ResultVO;
 
 public class ResultVOUtil {
 

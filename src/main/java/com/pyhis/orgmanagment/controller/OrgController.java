@@ -1,17 +1,25 @@
 package com.pyhis.orgmanagment.controller;
 
+import com.pyhis.orgmanagment.VO.ResultVO;
+import com.pyhis.orgmanagment.config.RedisService;
 import com.pyhis.orgmanagment.entity.Org;
 import com.pyhis.orgmanagment.service.OrgService;
+import com.pyhis.orgmanagment.utils.ResultVOUtil;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @Log4j2
 public class OrgController {
 
     @Autowired
-    private OrgService orgService;
+    OrgService orgService;
+
+    @Autowired
+    RedisService redisService;
 
 
     @PostMapping("/createOrg")
@@ -28,5 +36,11 @@ public class OrgController {
         return ResultVOUtil.success(org);
     }
 
+    @GetMapping("/setRedis")
+    public void setRedis(){
+     redisService.setEx("name",30,"peng");
+     Long expire = redisService.expire("name",50);
+     log.info(redisService.get("name"),expire);
+    }
 
 }
