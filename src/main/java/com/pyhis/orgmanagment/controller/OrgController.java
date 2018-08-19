@@ -36,11 +36,11 @@ public class OrgController {
         return ResultVOUtil.success(org);
     }
 
-    @GetMapping("/setRedis")
-    public void setRedis(){
-     redisService.setEx("name",30,"peng");
-     Long expire = redisService.expire("name",50);
-     log.info(redisService.get("name"),expire);
-    }
+//    @GetMapping("/setRedis")
+//    public void setRedis(){
+//     redisService.setEx("name",30,"peng");
+//     Long expire = redisService.expire("name",50);
+//     log.info(redisService.get("name"),expire);
+//    }
 
 }

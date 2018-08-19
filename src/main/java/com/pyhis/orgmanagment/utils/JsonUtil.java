@@ -1,7 +1,9 @@
 package com.pyhis.orgmanagment.utils;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.pyhis.orgmanagment.entity.User;
@@ -13,13 +15,18 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 反序列化工具类
+ */
 @Log4j2
-@JsonInclude(JsonInclude.Include.ALWAYS)   //对象的所有字段 全部列入
 public class JsonUtil {
 
     private static ObjectMapper objectMapper = new ObjectMapper();
 
     static {
+        //对象的所有字段 全部列入
+        objectMapper.setSerializationInclusion(JsonInclude.Include.ALWAYS);
+
         //取消默认转换timestamps形式
         objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
 
@@ -76,7 +83,7 @@ public class JsonUtil {
      * @param str，clazz
      * @return
      */
-    public static<T> T String2Obj(String str, Class<T> clazz) {
+    public static<T> T string2Obj(String str, Class<T> clazz) {
         try {
             if(StringUtils.isEmpty(str)||clazz==null){
               return null;
@@ -88,6 +95,31 @@ public class JsonUtil {
         return null;
     }
 
+    public static<T> T string2Obj(String str, TypeReference<T> typeReference){
+        if(StringUtils.isEmpty(str) || typeReference ==null){
+            return  null;
+        }
+        try {
+            return (T)(typeReference.getType().equals(String.class)? str : objectMapper.readValue(str,typeReference));
+        }catch (Exception e){
+            log.warn("Parse String to Object error",e);
+            return null;
+        }
+
+    }
+
+
+    public static<T> T string2Obj(String str,Class<?> collectionClass,Class<?>... elementClasses ) {
+        JavaType javaType = objectMapper.getTypeFactory().constructParametricType(collectionClass, elementClasses);
+
+        try {
+            return objectMapper.readValue(str, javaType);
+        } catch (Exception e) {
+            log.warn("Parse String to Object error", e);
+            return null;
+        }
+    }
+
     public static void main(String[] args) {
         User u1 = new User();
         u1.setUserId("123");
@@ -97,23 +129,14 @@ public class JsonUtil {
         u2.setUserId("456");
         u2.setUserName("shengsiyan");
 
-        String user1Json = JsonUtil.obj2String(u1);
-        String user1JsonPre = JsonUtil.obj2StringPretty(u1);
-
-        log.info("user1Json:{}",user1Json);
-        log.info("use1JsonPre:{}",user1JsonPre);
-
-        User user = JsonUtil.String2Obj(user1Json,User.class);
-
-
         List<User> userList = new ArrayList<>();
         userList.add(u1);
         userList.add(u2);
-        userList.add(user);
 
         String userListStr = JsonUtil.obj2StringPretty(userList);
-
+        List<User> userListObj = JsonUtil.string2Obj(userListStr, new TypeReference<List<User>>() {});
+        List<User> userListObj2 = JsonUtil.string2Obj(userListStr,List.class,User.class);
 
         System.out.println("end");
-    }
+     }
 }

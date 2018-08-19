@@ -68,7 +68,7 @@ public class RedisService {
      * @param value
      * @return
      */
-    public String setEx(String key,int exTime,String value) {
+    public String setEx(String key,String value,int exTime) {
         Jedis jedis = jedisPool.getResource();
         String str = "";
         try {
