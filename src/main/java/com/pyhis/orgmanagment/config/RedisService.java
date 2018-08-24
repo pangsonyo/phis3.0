@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.ShardedJedis;
+import redis.clients.jedis.ShardedJedisPool;
 
 /**
  * 暂时放此  后面要移动
@@ -16,6 +18,15 @@ public class RedisService {
     @Autowired
     JedisPool jedisPool;
 
+    private Jedis jedis;
+
+//    @Autowired
+//    ShardedJedisPool shardedJedisPool;
+//
+//    private ShardedJedis jedis;
+//
+
+
     /**
      * 设定Key value并指定有效时间
      * @param key
@@ -23,7 +34,7 @@ public class RedisService {
      * @return
      */
     public String set(String key,String value) {
-        Jedis jedis = jedisPool.getResource();
+        jedis = jedisPool.getResource();
         String str = "";
         try {
             str = jedis.set(key,value);
@@ -43,7 +54,7 @@ public class RedisService {
 
     //获取key的value值
     public String get(String key) {
-        Jedis jedis = jedisPool.getResource();
+        jedis = jedisPool.getResource();
         String str = "";
         try {
             str = jedis.get(key);
@@ -52,7 +63,6 @@ public class RedisService {
                 if(jedis!=null){
                     jedis.close();
                 }
-
             } catch (Exception e) {
                 log.error("get key:{}  error",key,e);
                 e.printStackTrace();
@@ -69,7 +79,7 @@ public class RedisService {
      * @return
      */
     public String setEx(String key,String value,int exTime) {
-        Jedis jedis = jedisPool.getResource();
+        jedis = jedisPool.getResource();
         String str = "";
         try {
             str = jedis.setex(key,exTime,value);
@@ -93,7 +103,7 @@ public class RedisService {
      * @return
      */
     public Long expire(String key,int exTime) {
-        Jedis jedis = jedisPool.getResource();
+        jedis = jedisPool.getResource();
         Long str = null;
         try {
             str = jedis.expire(key,exTime);
@@ -116,7 +126,7 @@ public class RedisService {
      * @return
      */
     public Long del(String key) {
-        Jedis jedis = jedisPool.getResource();
+        jedis = jedisPool.getResource();
         Long str = null;
         try {
             str = jedis.del(key);
