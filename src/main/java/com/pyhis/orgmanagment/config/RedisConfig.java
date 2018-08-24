@@ -4,14 +4,20 @@ import lombok.Data;
 
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.stereotype.Component;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
 @Data
 @Configuration
 @Log4j2
+@Component
+@ConfigurationProperties(prefix="spring")
+@PropertySource("classpath:application-${spring.profiles.active}.properties")
 public class RedisConfig {
 
     @Value("${spring.redis.host}")
@@ -43,7 +49,15 @@ public class RedisConfig {
         return jedisPool;
     }
 
-
-
-
+    @Override
+    public String toString() {
+        return "RedisConfig{" +
+                "host='" + host + '\'' +
+                ", port=" + port +
+                ", timeout=" + timeout +
+                ", maxIdle=" + maxIdle +
+                ", maxWaitMillis=" + maxWaitMillis +
+                ", password='" + password + '\'' +
+                '}';
+    }
 }
