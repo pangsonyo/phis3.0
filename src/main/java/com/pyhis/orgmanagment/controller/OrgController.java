@@ -3,12 +3,16 @@ package com.pyhis.orgmanagment.controller;
 import com.pyhis.orgmanagment.VO.ResultVO;
 import com.pyhis.orgmanagment.config.RedisService;
 import com.pyhis.orgmanagment.entity.Org;
+import com.pyhis.orgmanagment.entity.User;
 import com.pyhis.orgmanagment.service.OrgService;
+import com.pyhis.orgmanagment.utils.CookieUtil;
 import com.pyhis.orgmanagment.utils.ResultVOUtil;
 import lombok.extern.log4j.Log4j2;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
 @RestController
@@ -36,11 +40,12 @@ public class OrgController {
         return ResultVOUtil.success(org);
     }
 
-//    @GetMapping("/setRedis")
-//    public void setRedis(){
-//     redisService.setEx("name",30,"peng");
-//     Long expire = redisService.expire("name",50);
-//     log.info(redisService.get("name"),expire);
-//    }
+    @GetMapping("test")
+    public ResultVO<Org> test(String id) {
+        Optional<Org> org = orgService.findOrgById(id);
+
+        return ResultVOUtil.success(org);
+
+    }
 
 }

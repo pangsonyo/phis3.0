@@ -27,18 +27,15 @@ public class UserController {
     @Autowired
     RedisService redisService;
 
-//    @Autowired
-//    RedisService redisService;
-
     @GetMapping("login")
     public ResultVO<User> login(String userName, String password, HttpSession session, HttpServletResponse response) {
         ResultVO<User> user = userService.login(userName, password);
         if (user.isSuccess()) {
-            CookieUtil.writeLoginToken(response, session.getId());
-            //  CookieUtil.readLoginToken(request);
-            //  CookieUtil.delLoginToken(request,response);
-          //  redisService.setEx(session.getId(), JsonUtil.obj2String(user.getData()), Const.RedisCacheExtime.REDIS_SESSION_EXTIME);
-            log.info("write Redis Success key:{}", session.getId());
+//            CookieUtil.writeLoginToken(response, session.getId());
+//            CookieUtil.readLoginToken(request);
+//             CookieUtil.delLoginToken(request,response);
+//            redisService.setEx(session.getId(), JsonUtil.obj2String(user.getData()), Const.RedisCacheExtime.REDIS_SESSION_EXTIME);
+//            log.info("write Redis Success key:{}", session.getId());
         }
         return user;
     }
@@ -68,10 +65,7 @@ public class UserController {
         return  ResultVO.createBySuccess();
     }
 
-    @GetMapping("test")
-    public void test(){
 
-    }
 
 
 
