@@ -23,6 +23,9 @@ public class Org {
     private String orgOwner;
 
     private String orgAddr;
+    
+    @Column(name="org_parentid")
+    private String orgParentId;
 
     @Column(name="org_createtime")
     private Date orgCreateTime;
